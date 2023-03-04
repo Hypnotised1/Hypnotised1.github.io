@@ -282,10 +282,10 @@
 <p>因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是有办法可查的。<br>注意<code>git config</code>命令的<code>--global</code>参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。</p>
 </blockquote>
 <p>查看密钥<br><code>cd ~/.ssh</code>如果没有，则不会有此文件夹，有的话则备份删除</p>
-<p>生成密钥<br><code>$ ssh-keygen -t rsa -C "<a href="mailto:&#x65;&#x6d;&#97;&#x69;&#108;&#64;&#x65;&#x78;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#x6f;&#109;">&#x65;&#x6d;&#97;&#x69;&#108;&#64;&#x65;&#x78;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#x6f;&#109;</a>" </code> 按3个回车，密码为空。<br>最后得到了两个文件：id_rsa和id_rsa.pub</p>
+<p>生成密钥<br><code>$ ssh-keygen -t rsa -C "<a href="mailto:&#101;&#109;&#97;&#105;&#x6c;&#64;&#101;&#x78;&#x61;&#x6d;&#x70;&#108;&#101;&#46;&#x63;&#111;&#109;">&#101;&#109;&#97;&#105;&#x6c;&#64;&#101;&#x78;&#x61;&#x6d;&#x70;&#108;&#101;&#46;&#x63;&#111;&#109;</a>" </code> 按3个回车，密码为空。<br>最后得到了两个文件：id_rsa和id_rsa.pub</p>
 <p>添加密钥到ssh-agent(如果报错, 尝试执行<code> eval `ssh-agent -s`<code> 后, 再执行下面的命令)<br><code> $ ssh-add ~/.ssh/id_rsa</code></p>
 <p>登录Github，添加ssh<br>把id_rsa.pub文件里的内容复制到Github中的ssh keys中<br><img src="/images/github-ssh.png" alt="Github ssh" title="Github ssh"></p>
-<p>测试<br><code>$ ssh -T <a href="mailto:&#103;&#105;&#x74;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#98;&#46;&#99;&#111;&#109;">&#103;&#105;&#x74;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#98;&#46;&#99;&#111;&#109;</a></code>选择yes，就可以看到你的用户名，则说明配置成功<br><img src="/images/git-ssh-success.png" alt="git-ssh-success" title="配置成功"></p>
+<p>测试<br><code>$ ssh -T <a href="mailto:&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#116;&#104;&#x75;&#98;&#x2e;&#x63;&#111;&#109;">&#x67;&#x69;&#x74;&#x40;&#103;&#105;&#116;&#104;&#x75;&#98;&#x2e;&#x63;&#111;&#109;</a></code>选择yes，就可以看到你的用户名，则说明配置成功<br><img src="/images/git-ssh-success.png" alt="git-ssh-success" title="配置成功"></p>
 <h3 id="创建Repository"><a href="#创建Repository" class="headerlink" title="创建Repository"></a>创建Repository</h3><p><img src="/images/create-repository.png" alt="create Repository" title="创建Repository"><br><strong>注 :Repository name为 用户名.github.io</strong><br>我已经创建了，所以会有错误的提示。</p>
 <h2 id="配置hexo"><a href="#配置hexo" class="headerlink" title="配置hexo"></a>配置hexo</h2><p>hexo是一款基于Node.js的静态博客框架。</p>
 <h3 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h3><p>安装<a target="_blank" rel="noopener" href="https://nodejs.org/en/">Node.js</a>。去官网上下载，直接安装就可以。<br>NPM(Node Package Manager) 是Node.js的包管理器，Node.js中的带有NPM。</p>
