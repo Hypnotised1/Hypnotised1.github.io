@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /archives/
+Allow: /categories/
+Allow: /tags/ 
+Allow: /page/ 
+Allow: /post/ 
+
+Disallow: /baidu_urls.txt
+Disallow: /404.html
+
+Sitemap: http://www.funnyphd.com/sitemap.xml
+Sitemap: http://www.funnyphd.com/baidusitemap.xml

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon0.5-0.5.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon0.5-0.5.jpg">
+  <link rel="mask-icon" href="/images/favicon.jpg" color="#222">
+  <meta name="google-site-verification" content="Jb_bjwF9Vf0LkWaFJ-iBd1dcohPoVP9XEjxZ3DKsPpI">
+  <meta name="baidu-site-verification" content="kKLXwVlluL8HyVn7">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"funnyphd.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="信息社会, 我们在日常生活中一直谈论信息, 但是信息这个概念有些抽象. 有时候说信息多, 或者信息少, 但是很难说清楚到底是多少. 比如一本50多万字的中文书&lt;史记&gt;到底有多少信息量, 很难进行定量的表示. 直到1948年, 香农(Claude Shannon)提出了信息熵的概念, 才解决了信息度量问题.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信息熵 - 条件熵 - 交叉熵">
+<meta property="og:url" content="https://funnyphd.com/crossentropy.html">
+<meta property="og:site_name" content="油区波斯猫">
+<meta property="og:description" content="信息社会, 我们在日常生活中一直谈论信息, 但是信息这个概念有些抽象. 有时候说信息多, 或者信息少, 但是很难说清楚到底是多少. 比如一本50多万字的中文书&lt;史记&gt;到底有多少信息量, 很难进行定量的表示. 直到1948年, 香农(Claude Shannon)提出了信息熵的概念, 才解决了信息度量问题.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-13T13:22:02.000Z">
+<meta property="article:modified_time" content="2023-03-02T09:25:40.000Z">
+<meta property="article:author" content="LXX">
+<meta property="article:tag" content="数学概念">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://funnyphd.com/crossentropy.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://funnyphd.com/crossentropy.html","path":"crossentropy.html","title":"信息熵 - 条件熵 - 交叉熵"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>信息熵 - 条件熵 - 交叉熵 | 油区波斯猫</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5CZMBMJG46"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-5CZMBMJG46","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?1ba44d1921ff0792a7d69f302f34a4d7"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">油区波斯猫</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">波斯猫</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E7%86%B5"><span class="nav-number">1.</span> <span class="nav-text">信息熵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E7%86%B5"><span class="nav-number">2.</span> <span class="nav-text">条件熵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%86%B5-%E7%9B%B8%E5%AF%B9%E7%86%B5-Kullback-Leibler-Divergence"><span class="nav-number">3.</span> <span class="nav-text">交叉熵(相对熵) (Kullback-Leibler Divergence)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F-%E6%9C%AC%E6%96%87%E4%B8%AD%E7%9A%84%E5%AF%B9%E6%95%B0%E5%9D%87%E6%98%AF%E4%BB%A52%E4%B8%BA%E5%BA%95-log-log-2"><span class="nav-number">3.1.</span> <span class="nav-text">注意: 本文中的对数均是以2为底. $log&#x3D;&#x3D;log_2$</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="LXX"
+      src="/images/favicon.jpg">
+  <p class="site-author-name" itemprop="name">LXX</p>
+  <div class="site-description" itemprop="description">舒之弥四海，卷之不赢怀。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hypnotised1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hypnotised1" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/LxxHHxx" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;LxxHHxx" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://funnyphd.com/crossentropy.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="LXX">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="油区波斯猫">
+      <meta itemprop="description" content="舒之弥四海，卷之不赢怀。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="信息熵 - 条件熵 - 交叉熵 | 油区波斯猫">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          信息熵 - 条件熵 - 交叉熵
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-13 21:22:02" itemprop="dateCreated datePublished" datetime="2022-10-13T21:22:02+08:00">2022-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-02 17:25:40" itemprop="dateModified" datetime="2023-03-02T17:25:40+08:00">2023-03-02</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/crossentropy.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="crossentropy.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>信息社会, 我们在日常生活中一直谈论信息, 但是信息这个概念有些抽象. 有时候说信息多, 或者信息少, 但是很难说清楚到底是多少. 比如一本50多万字的中文书&lt;史记&gt;到底有多少信息量, 很难进行定量的表示. 直到1948年, 香农(Claude Shannon)提出了信息熵的概念, 才解决了信息度量问题.</p>
+<span id="more"></span>
+
+<h1 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h1><p>一条信息的信息量和它的不确定性有着直接关系. 举个例子, 一个有5个字的句子(你吃饭了吗?)和有17个字的句子(我刚在市中心的CBD内吃完, 吃的牛排.)包含的信息量正常情况下是不一样的, 包括17个字的句子所包含的信息量应该大于5个字的. </p>
+<p>如何对信息进行量化呢? 再来举个例子, 2018年的世界杯, 大家都很关心谁是冠军. 假如我错过了看世界杯, 赛后问一个知道比赛结果的观众”哪只球队是冠军”? 他不愿意直接告诉我, 而是让我去猜, 并且猜一次收费1元. 那么我需要猜测多少次才能知道谁是冠军呢? 我可以把球队编为1-32号, 然后采用二分法进行猜测, 直至猜到结果. 这样我只需要五次就可以知道谁是冠军. 所以, 谁是世界杯冠军这条消息的信息量只值5元钱.</p>
+<p>香农采用”比特(Bit)”来度量信息量. 上面的例子中, 这条消息的信息量是5比特. ($log_2^32 =5$) 世界杯每只球队的夺冠概率是不一致的, 我们在进行猜测时需要有侧重点的进行猜测, 因此”谁是世界杯冠军”的信息量比5比特少. 香农指出, 它的准确信息量应该是<br>$H=-(p_1 \cdot log p_1 + p_2 \cdot log p_2 + \cdots + p_{32} \cdot log p_{32} )$ 其中, $p_1, p_2, \cdots , p_{32}$分别是这32支球队夺冠的概率. 香农把$H$称之为信息熵(Entropy), 单位比特. 对于任意一个随机变量X(比如得冠军的球队), 它的熵为</p>
+<p>$H(X) = - \sum _{x \in X} P(x) logP(x)$</p>
+<p>变量的不确定性越大, 熵也就越大.</p>
+<h1 id="条件熵"><a href="#条件熵" class="headerlink" title="条件熵"></a>条件熵</h1><p>假定X和Y是两个随机变量, X是我们需要了解的. 假定我们知道X的随机分布P(X), 那么也就知道了X的熵</p>
+<p>$H(X) = -\sum _{x \in X} P(x) \cdot log P(x)$</p>
+<p>现在假定我们还知道Y的一些情况, 包括它和X一起出现的概率(在数学上称之为联合概率分布), 以及在Y取不同值的前提下X的概率分布(在数学上称之为条件概率分布). 那么定义在Y条件下X的条件熵为</p>
+<p>$H(X|Y) = - \sum _{x \in X, y\in Y} P(x,y) log P(x|y)$</p>
+<h1 id="交叉熵-相对熵-Kullback-Leibler-Divergence"><a href="#交叉熵-相对熵-Kullback-Leibler-Divergence" class="headerlink" title="交叉熵(相对熵) (Kullback-Leibler Divergence)"></a>交叉熵(相对熵) (Kullback-Leibler Divergence)</h1><p>交叉熵可以用来衡量相关性, 它用来衡量两个取值为正数的函数的相似性, 定义如下</p>
+<p>$KL(f(x) || g(x)) = \sum _{x\in X} f(x) \cdot log \frac{f(x)}{g(x)}$</p>
+<p>我们不需要关注公式本身, 只需要记住下面三条结论就可以:</p>
+<ol>
+<li>对于两个完全相同的函数, 它们的交叉熵为0.</li>
+<li>交叉熵越大, 两个函数差异越大; 反之, 交叉熵越小, 两个函数差异越小.</li>
+<li>对于概率分布或者概率密度函数, 如果取值均大于0, 交叉熵可以度量两个随机分布的差异性.</li>
+</ol>
+<h2 id="注意-本文中的对数均是以2为底-log-log-2"><a href="#注意-本文中的对数均是以2为底-log-log-2" class="headerlink" title="注意: 本文中的对数均是以2为底. $log==log_2$"></a>注意: 本文中的对数均是以2为底. $log==log_2$</h2>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/LxxHHxx">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6%E6%A6%82%E5%BF%B5/" rel="tag"># 数学概念</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/anacondahelp.html" rel="prev" title="Anaconda Python 环境管理">
+                  <i class="fa fa-chevron-left"></i> Anaconda Python 环境管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/activationfunction.html" rel="next" title="常用激活函数- Sigmoid - Tanh - ReLU - Softmax">
+                  常用激活函数- Sigmoid - Tanh - ReLU - Softmax <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LXX</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"www-funnyphd-com","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
